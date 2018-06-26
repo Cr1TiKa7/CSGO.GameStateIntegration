@@ -43,8 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventArgs\OnBombStateChangedEventArgs.cs" />
     <Compile Include="EventArgs\OnNewGameStateEventArgs.cs" />
+    <Compile Include="EventArgs\OnPlayerDamagedEventArgs.cs" />
     <Compile Include="EventArgs\OnPlayerFlashedEventArgs.cs" />
+    <Compile Include="EventArgs\OnRoundPhaseChangedEventArgs.cs" />
+    <Compile Include="EventArgs\OnTeamWinsEventArgs.cs" />
     <Compile Include="GameStateListener.cs" />
     <Compile Include="ResponseObject\GameState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +59,9 @@
     <Compile Include="ResponseObject\Round.cs" />
     <Compile Include="ResponseObject\State.cs" />
     <Compile Include="ResponseObject\Team.cs" />
+    <Compile Include="State\BombState.cs" />
+    <Compile Include="State\PhaseState.cs" />
+    <Compile Include="State\TeamType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

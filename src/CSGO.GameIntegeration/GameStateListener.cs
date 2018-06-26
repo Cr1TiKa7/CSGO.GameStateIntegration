@@ -23,6 +23,10 @@ namespace CSGO.GameStateIntegeration
 
         public EventHandler<OnNewGameStateEventArgs> OnNewGameState;
         public EventHandler<OnPlayerFlashedEventArgs> OnPlayerFlashed;
+        public EventHandler<OnPlayerDamagedEventArgs> OnPlayerDamaged;
+        public EventHandler<OnRoundPhaseChangedEventArgs> OnRoundPhaseChanged;
+        public EventHandler<OnBombStateChangedEventArgs> OnBombStateChanged;
+        public EventHandler<OnTeamWinsEventArgs> OnTeamWins;
 
         public GameStateListener()
         {
@@ -91,17 +95,53 @@ namespace CSGO.GameStateIntegeration
                 //Invoke events if the gamestate is not null.
                 if (gameState != null)
                 {
-                    _LatestGameState = gameState;
+                    //New game state received
                     OnNewGameState?.Invoke(this, new OnNewGameStateEventArgs
                     {
                         GameState = gameState
                     });
 
+                    //Player is flashed.
                     if (gameState.Player.State.Flashed > 0)
                         OnPlayerFlashed?.Invoke(this, new OnPlayerFlashedEventArgs
                         {
                              Flashed = gameState.Player.State.Flashed
                         });
+
+                    //Player got damage
+                    if (_LatestGameState?.Player.State.Health > gameState.Player.State.Health ||
+                        _LatestGameState?.Player.State.Armor > gameState.Player.State.Armor)
+                        OnPlayerDamaged?.Invoke(this, new OnPlayerDamagedEventArgs
+                        {
+                            Armor = gameState.Player.State.Armor,
+                            Health = gameState.Player.State.Health
+                        });
+
+                    //Bombstate changed
+                    if (_LatestGameState?.Round.Bomb != gameState.Round.Bomb && gameState.Round.Bomb != State.BombState.Undefined)
+                        OnBombStateChanged?.Invoke(this, new OnBombStateChangedEventArgs
+                        {
+                            BombState = gameState.Round.Bomb
+                        });
+
+                    //Roundstate changed
+                    if (_LatestGameState?.Round.Phase != gameState.Round.Phase && gameState.Round.Phase !=  State.PhaseState.Undefined)
+                        OnRoundPhaseChanged?.Invoke(this, new OnRoundPhaseChangedEventArgs
+                        {
+                             RoundPhase = gameState.Round.Phase
+                        });
+
+                    //Bombstate changed
+                    if (_LatestGameState?.Round.WinTeam != gameState.Round.WinTeam && gameState.Round.WinTeam != State.TeamType.Undefined)
+                        OnBombStateChanged?.Invoke(this, new OnBombStateChangedEventArgs
+                        {
+                            BombState = gameState.Round.Bomb
+                        });
+
+                    if (gameState.Player.MatchStats.Kills > _LatestGameState?.Player.MatchStats.Kills)
+                        Console.WriteLine("Kill");
+
+                    _LatestGameState = gameState;
                 }
 
             }

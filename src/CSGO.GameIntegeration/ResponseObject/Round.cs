@@ -1,11 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using CSGO.GameStateIntegeration.State;
+using Newtonsoft.Json;
 
 namespace CSGO.GameStateIntegeration.ResponseObject
 {
     public class Round
     {
-        public string Phase { get; set; }
+        public PhaseState Phase { get; set; }
         [JsonProperty(PropertyName = "win_team")]
-        public string WinTeam { get; set; }
+        public TeamType WinTeam { get; set; }
+        public BombState Bomb { get; set; }
     }
 }
